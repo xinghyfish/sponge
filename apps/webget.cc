@@ -8,6 +8,17 @@ using namespace std;
 
 void get_URL(const string &host, const string &path) {
     // Your code here.
+    Address web_lookup(host, "http");
+    TCPSocket client_sock;
+    client_sock.connect(web_lookup);
+    client_sock.write("GET " + path + " HTTP/1.1\r\n");
+    client_sock.write("Host: " + host + "\r\n");
+    client_sock.write("Connection: close\r\n");
+    client_sock.write("\r\n");
+    
+    while (!client_sock.eof())
+        cout << client_sock.read();
+    client_sock.close();
 
     // You will need to connect to the "http" service on
     // the computer whose name is in the "host" string,
