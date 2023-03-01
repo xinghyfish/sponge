@@ -8,6 +8,7 @@
 
 #include <functional>
 #include <queue>
+#include <map>
 
 //! \brief The "sender" part of a TCP implementation.
 
@@ -17,6 +18,15 @@
 //! segments if the retransmission timer expires.
 class TCPSender {
   private:
+    std::map<uint64_t, TCPSegment> _outstanding_segments{};
+    size_t _outstanding_byte_counter{0};
+    uint16_t _window_size{1};
+    unsigned int _consecutive_retransmissions_counter{0};
+    bool _syn{false};
+    bool _fin{false};
+    int _timeout{0};
+    int _timer{-1};
+    
     //! our initial sequence number, the number for our SYN.
     WrappingInt32 _isn;
 
